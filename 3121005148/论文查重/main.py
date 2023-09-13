@@ -1,27 +1,23 @@
-# -*- coding:utf-8 -*-
 from simhash import Simhash
 import re
 import sys
 import argparse
+import time
+
+# 清除文本文件中的html
+def filter_html(html):
+
+    dd = re.compile(r'<[^>]+>', re.S).sub('', html).strip()
+
+    return dd
 
 # 读取文本文件
 def read_file(files):
     corpus = []
     for file in files:
         with open(file, "r", encoding='UTF-8') as paper:
-            corpus.append(paper.read())
+            corpus.append(filter_html(paper.read()))
     return corpus
-
-# 清除文本文件中的html
-def filter_html(html):
-    """
-    :param html: html
-    :return: 返回去掉html的纯净文本
-    """
-    dr = re.compile(r'<[^>]+>', re.S)
-    dd = dr.sub('', html).strip()
-    return dd
-
 
 # 求两篇文章相似度
 def simhash_similarity(text1, text2):
@@ -35,17 +31,17 @@ def simhash_similarity(text1, text2):
 
     max_hashbit = max(len(bin(aa_simhash.value)), (len(bin(bb_simhash.value))))
 
-    print(max_hashbit)
+    #print(max_hashbit)
 
     # 汉明距离
     distince = aa_simhash.distance(bb_simhash)
-    print(distince)
+    #print(distince)
 
     similar = 1 - distince / max_hashbit
 
     return similar
 
-def main_fub(file1,fil2,file3):
+def main_fun(file1,fil2,file3):
     files = []
     files.append(file1)
     files.append(fil2)
@@ -62,12 +58,16 @@ def main_fub(file1,fil2,file3):
     f.close()
 
 if __name__ == '__main__':
+    
+
+    if len(sys.argv) != 4:
+        print('命令行参数个数错误！')
+        exit()
+
     file_1 = sys.argv[1]
     file_2 = sys.argv[2]
     file_3 = sys.argv[3]
 
-    '''file_1 = r"D:\微信数据\测试文本\orig.txt"
-    file_2 = r"D:\微信数据\测试文本\orig_0.8_add.txt"
-    file_3 = r"D:\微信数据\测试文本\result.txt"'''
 
-    main_fub(file_1,file_2,file_3)
+    main_fun(file_1,file_2,file_3)
+
