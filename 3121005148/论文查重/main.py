@@ -1,8 +1,6 @@
 from simhash import Simhash
 import re
 import sys
-import argparse
-import time
 
 # 清除文本文件中的html
 def filter_html(html):
